@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>抽奖</title>
+
+  <style type="text/css">
+    html {
+      font-size: 13.333vw;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .window-container {
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+
+      background-image: linear-gradient(180deg, #CF89F8 0%, #A151EF 100%);
+      box-shadow: 0 0.03rem 0.02rem 0 #6816A3;
+      border-radius: 0.2rem;
+
+      width: 6.9rem;
+      height: 4rem;
+
+      margin-top: 3.7rem;
+
+      z-index: 10;
+    }
+
+    .window-container .grab {
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      border: 0.1rem solid #9013FE;
+      box-shadow: inset 0 0 1.2rem 0 #2E0651;
+      border-radius: 0.2rem;
+
+      background: rgba(150, 80, 201, 0.6);
+
+      width: 6.24rem;
+      height: 2.6rem;
+
+      margin-bottom: 0.2rem;
+    }
+
+    .window-container .grab .top-pin {
+      position: absolute;
+      top: 0;
+
+      width: 0.68rem;
+      height: 0.6rem;
+
+      background-image: url("https://oss.laoyouzhibo.com/square/cdn/images/eb42305979154d13b82836603bdfd09d.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      z-index: 10;
+    }
+
+    .window-container .grab .bottom-pin {
+      position: absolute;
+      bottom: 0;
+
+      width: 0.68rem;
+      height: 0.6rem;
+
+      background-image: url("https://oss.laoyouzhibo.com/square/cdn/images/21a92a0ea5824727a470d088fd9bba6b.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      z-index: 10;
+    }
+
+    .window-container .grab .roulette {
+      width: 6.24rem;
+
+      overflow: hidden;
+    }
+
+    .window-container .grab .roulette .items {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+
+      height: 1.7rem;
+
+      margin-left: -0.78rem;
+    }
+
+    .window-container .grab .roulette .items .img-item {
+      width: 1.56rem;
+      height: 1.7rem;
+      margin-right: 1.56rem;
+
+      flex-shrink: 0;
+    }
+
+    .window-container .grab .roulette .items .img-item img {
+      width: 1.56rem;
+      height: 1.7rem;
+    }
+
+    .start {
+      margin-top: 0.1rem;
+
+      background-image: url("https://oss.laoyouzhibo.com/square/cdn/images/0ea437cd010f4fe7823444eb0e8fa1bb.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      width: 4.44rem;
+      height: 1.08rem;
+    }
+
+    .start.disabled {
+      background-image: url("https://oss.laoyouzhibo.com/square/cdn/images/aa0e87f691604a9d9ad1cc43ae9eb1ab.png");
+    }
+  </style>
+
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+</head>
+<body>
+  <div class="window-container">
+    <div class="grab">
+      <div class="top-pin"></div>
+      <div class="bottom-pin"></div>
+      <div class="roulette">
+        <div class="items">
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/cca84f7269624c5ba73809a72da096d1.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/9af0a124b9604750a97410a5963fa185.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/3022b55571974a5abb8bc85c2d47c3bc.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/6fe7dc4a5a2b4ee0baf3c023d974e49a.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/8f8f61295b0644719ad53c6775165d35.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/32c6f851b3d04529942d8c6badcda110.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/cca84f7269624c5ba73809a72da096d1.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/9af0a124b9604750a97410a5963fa185.png">
+          </div>
+          <div class="img-item">
+            <img src="https://oss.laoyouzhibo.com/square/cdn/images/3022b55571974a5abb8bc85c2d47c3bc.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="disabled start"></div> -->
+  <div class="start"></div>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var isRunning = false;
+
+      var itemWidth = $('.img-item').width();
+      var itemCount = $('.img-item').length;
+      var gapWidth = $('.img-item').width();
+      var initPosition = - itemWidth / 2;
+      var curPosition = initPosition;
+      var totalWidth = (itemWidth + gapWidth) * itemCount;
+      var minPosition = initPosition - totalWidth;
+      var stopPosition = 0;
+
+      var result = {};
+      var timePassed = 0;
+      var speed = 1;
+
+      var totalDuration = 1 * 1000; // ms
+      var feedTime = 0.2; // speed will change twice in totalDuration, first speedUpFinished at 0.3 * totalDuration and speedDownStart at (1-0.3) * totalDuration
+      var maxSpeed = 10;
+
+      var speedChangeTimer;
+
+      function init() {
+        $('.items').append( $('.img-item').eq(0).clone() );
+        $('.items').append( $('.img-item').eq(1).clone() );
+        $('.items').append( $('.img-item').eq(2).clone() );
+      }
+
+      init();
+
+      var scroll = function() {
+        curPosition -= speed;
+
+        if (timePassed > totalDuration && (parseInt(curPosition) == parseInt(stopPosition) || parseInt(curPosition) == parseInt(stopPosition + 1) || parseInt(curPosition) == parseInt(stopPosition - 1))) {
+          $('.items').css('margin-left', stopPosition);
+          stop();
+          return;
+        } else {
+          curPosition = curPosition <= minPosition ? initPosition : curPosition;
+
+          $('.items').css('margin-left', curPosition);
+        }
+
+        scrollTimer = setTimeout(scroll, 1);
+      }
+
+      var changeSpeed = function() {
+        timePassed += 1;
+        rate = maxSpeed / (feedTime * totalDuration);
+
+        if (timePassed < feedTime * totalDuration) {
+          speed += rate
+          speed = speed > maxSpeed ? maxSpeed : speed;
+        } else if (timePassed > (1 - feedTime) * totalDuration) {
+          speed -= rate
+          speed = speed < 1 ? 1 : speed;
+        }
+
+        speedChangeTimer = setTimeout(changeSpeed, 1);
+      }
+      var start = function (json) {
+        result = json;
+
+        if (result.stopImageNumber >= 1) {
+          stopPosition = initPosition - (result.stopImageNumber - 1) * (itemWidth + gapWidth);
+        } else {
+          stopPosition = initPosition - (itemCount - 1) * (itemWidth + gapWidth);
+        }
+
+        console.log({stopPosition: stopPosition, curPosition: curPosition});
+
+        changeSpeed();
+        scroll();
+      }
+
+      var stop = function () {
+        curPosition = stopPosition;
+        timePassed = 0;
+        isRunning = false;
+
+        clearInterval(scrollTimer);
+        clearInterval(speedChangeTimer);
+
+        setTimeout(function() {
+          alert(
+            "充值钻石：" + result.charge_count + "钻\n" +
+            "奖励倍数：" + result.award_radio + "\n" +
+            "奖励钻石：" + result.award_count + "钻\n"
+          );
+        }, 300);
+      }
+
+      var array = [10, 5, 2, 0.5, 0.3, 0.1];
+
+      $('.start').on('click', function() {
+        if ($(this).hasClass('disabled')) { return false; }
+        if (isRunning) { return false; }
+        isRunning = true;
+
+        var index = Math.floor(Math.random()*array.length);
+        json = {
+          charge_count: 100, // 充值金额
+          award_radio: array[index], // 奖励倍数
+          award_count: array[index] * 100, // 奖励数量
+          stopImageNumber: index, // 抽中倍数所对应的图片号
+          charge_awards_count: 1, // 剩余抽奖次数
+        }
+        start(json);
+        // $.post(
+        //   "/web/activity/charge_awards/grab"
+        // ).success(function(json) {
+        //   $('#remain').text("剩余抽奖次数" + json.charge_awards_count + "次")
+        //   if (json.charge_awards_count == 0) { $('.start').addClass('disabled'); }
+
+        //   start(json);
+        // });
+      })
+    })
+  </script>
+</body>
+</html>

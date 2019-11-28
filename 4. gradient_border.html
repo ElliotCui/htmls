@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>渐变边框</title>
+  <style type="text/css">
+    html {
+      font-size: 13.333vw;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #multi-color {
+      width: 300px;
+      height: 300px;
+      box-sizing: border-box;
+      padding: 20px;
+      border-radius:50%;
+      background-image:-webkit-linear-gradient(left, red 0%, blue 30%, yellow 60%, green 90%);
+    }
+
+    #multi-color img {
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .gradient-container {
+      position: relative;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      align-items: center;
+
+      width: 6.18rem;
+
+      border: 0.1rem solid transparent;
+      border-radius: 0.3rem;
+      background: white;
+      background-clip: padding-box;
+      padding: 0.67rem 0.32rem 1.1rem 0.32rem;
+
+      margin-top: 1rem;
+    }
+
+    .gradient-container:after {
+      position: absolute;
+      top: -0.1rem; right: -0.1rem; bottom: -0.1rem; left: -0.1rem;
+
+      background: linear-gradient(90deg, #FA8C38 0%, #9E0EF5 100%);
+      content: '';
+      z-index: -1;
+      border-radius: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="multi-color">
+      <img src="https://oss.laoyouzhibo.com/square/release/users/photo/e6409cd7f3a443659d07521be67091cf.png" alt="avatar" id=xss>
+    </div>
+
+    <div class="gradient-container">
+      <p>这是一个具有渐变色边框的container</p>
+    </div>
+  </div>
+</body>
+</html>
